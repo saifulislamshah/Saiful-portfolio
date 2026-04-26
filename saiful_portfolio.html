@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saiful Islam Shah — AI Agent Developer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ============================================================
+       CSS VARIABLES — Edit colors here to change the whole theme
+       ============================================================ */
+    :root {
+      --purple:       #534AB7; /* GoAxilo brand purple */
+      --purple-dark:  #3C3489;
+      --purple-light: #EEEDFE;
+      --purple-mid:   #AFA9EC;
+      --black:        #0D0D0F;
+      --white:        #F8F7FF;
+      --gray:         #888780;
+      --gray-light:   #F1EFE8;
+      --gray-border:  #D3D1C7;
+      --text-primary: #0D0D0F;
+      --text-muted:   #5F5E5A;
+      --card-bg:      #ffffff;
+      --bg:           #F8F7FF;
+      --code-bg:      #0D0D0F;
+      --radius:       12px;
+      --radius-sm:    8px;
+    }
+
+    /* ============================================================
+       RESET & BASE — Don't edit unless you know CSS well
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ============================================================
+       NAVIGATION — The top sticky menu bar
+       ============================================================ */
+    nav {
+      /* Change background/border to restyle the navbar */
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(248, 247, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--gray-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+      height: 64px;
+    }
+
+    /* Logo / Brand name in nav */
+    .nav-brand {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--purple);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    /* Nav link list */
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--purple); }
+
+    /* ============================================================
+       SECTION LAYOUT — Shared layout for every section
+       ============================================================ */
+    section {
+      padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Thin decorative divider between sections */
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--gray-border);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Section heading label (small uppercase above title) */
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--purple);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Main section title */
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    /* ============================================================
+       HERO SECTION — The very first thing visitors see
+       Edit your intro text, tagline, and social links here
+       ============================================================ */
+    #hero {
+      min-height: calc(100vh - 64px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative background grid dots — purely visual */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, var(--gray-border) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.5;
+      z-index: 0;
+    }
+
+    /* Purple gradient glow — decorative */
+    #hero::after {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -120px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(83,74,183,0.12) 0%, transparent 70%);
+      z-index: 0;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Greeting chip at top */
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--purple-light);
+      border: 1px solid var(--purple-mid);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--purple-dark);
+      margin-bottom: 2rem;
+    }
+
+    /* Pulsing green dot — "available for work" indicator */
+    .dot-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #1D9E75;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* Main hero heading — your name */
+    .hero-name {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.0;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Highlighted purple word in hero name */
+    .hero-name .accent {
+      color: var(--purple);
+    }
+
+    /* Hero subtitle / tagline */
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 560px;
+      margin: 1.5rem 0 2.5rem;
+      font-weight: 400;
+    }
+
+    /* ----------------------------------------
+       CODE BLOCK — The animated "business card"
+       This is the cool code-style intro block
+       Change the values inside to update your info
+       ---------------------------------------- */
+    .hero-code {
+      background: var(--code-bg);
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      line-height: 1.9;
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      /* Subtle left border accent */
+      border-left: 3px solid var(--purple);
+    }
+
+    /* Each syntax color used in the code block */
+    .code-keyword  { color: #AFA9EC; }  /* const, let, var */
+    .code-var      { color: #F8F7FF; }  /* variable name */
+    .code-string   { color: #9FE1CB; }  /* "string values" */
+    .code-key      { color: #FAC775; }  /* object keys */
+    .code-brace    { color: #888780; }  /* { } [ ] */
+    .code-comment  { color: #5F5E5A; }  /* // comments */
+
+    /* CTA Buttons in hero */
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Primary filled button */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--purple);
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
+
+    /* Secondary outlined button */
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--gray-border);
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .btn-secondary:hover { border-color: var(--purple); transform: translateY(-1px); }
+
+    /* ============================================================
+       ABOUT SECTION — Your bio and personality
+       Edit the paragraph text and stat numbers below
+       ============================================================ */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+      margin-top: 3rem;
+    }
+
+    /* Numbered stat cards (goals / metrics) */
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--gray-border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+    }
+    /* Large number in stat card */
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--purple);
+      line-height: 1;
+    }
+    /* Label below number */
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ============================================================
+       EXPERIENCE SECTION — Work history timeline
+       Add more .exp-item blocks to add more jobs
+       ============================================================ */
+    .exp-list {
+      margin-top: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* Single experience entry */
+    .exp-item {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 2rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--gray-border);
+      position: relative;
+    }
+    .exp-item:first-child { padding-top: 0; }
+    .exp-item:last-child { border-bottom: none; }
+
+    /* Date / company column */
+    .exp-meta { }
+    .exp-date {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.05em;
+    }
+    .exp-company {
+      font-weight: 500;
+      font-size: 0.88rem;
+      color: var(--purple);
+      margin-top: 4px;
+    }
+    .exp-location {
+      font-size: 0.78rem;
+      color: var(--gray);
+      margin-top: 2px;
+    }
+
+    /* Role title and description column */
+    .exp-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--text-primary);
+    }
+
+    /* Bullet list inside experience */
+    .exp-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .exp-bullets li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      padding-left: 1.25rem;
+      position: relative;
+    }
+    /* Custom bullet dot */
+    .exp-bullets li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--purple);
+      font-size: 0.8rem;
+    }
+
+    /* Tag chips used inside experience */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 1rem;
+    }
+    .tag {
+      font-size: 0.72rem;
+      font-family: 'DM Mono', monospace;
+      background: var(--purple-light);
+      color: var(--purple-dark);
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 500;
+    }
+
+    /* ============================================================
+       SKILLS SECTION — Your tech skills grid
+       Edit the skill groups and items inside to match yours
+       ============================================================ */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .skill-group {
+      background: var(--card-bg);
+      border: 1px solid var(--gray-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    /* Skill group icon + title row */
+    .skill-group-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+    /* Square icon badge */
+    .skill-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--purple-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+    }
+    .skill-group-title {
+      font-weight: 600;
+      font-size: 0.88rem;
+      font-family: 'Syne', sans-serif;
+    }
+    /* Individual skill pill */
+    .skill-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--gray-light);
+      font-size: 0.85rem;
+    }
+    .skill-item:last-child { border-bottom: none; }
+    /* Skill level badge — edit text inside each */
+    .skill-level {
+      font-size: 0.68rem;
+      font-family: 'DM Mono', monospace;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+    /* Color variants for skill level */
+    .level-learning { background: #EAF3DE; color: #3B6D11; }
+    .level-building { background: #FAEEDA; color: #854F0B; }
+    .level-proficient { background: var(--purple-light); color: var(--purple-dark); }
+
+    /* ============================================================
+       PROJECTS SECTION — Portfolio projects
+       Copy a .project-card block to add more projects
+       ============================================================ */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--gray-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .project-card:hover {
+      border-color: var(--purple-mid);
+      transform: translateY(-3px);
+    }
+
+    /* Project code block header (same style as hero) */
+    .project-code {
+      background: var(--code-bg);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      line-height: 1.8;
+      border-left: 2px solid var(--purple);
+    }
+
+    .project-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+    .project-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    /* Links row at bottom of project card */
+    .project-links {
+      display: flex;
+      gap: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--gray-light);
+    }
+    .project-link {
+      font-size: 0.8rem;
+      color: var(--purple);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .project-link:hover { text-decoration: underline; }
+
+    /* ============================================================
+       EDUCATION SECTION — Academic background
+       ============================================================ */
+    .edu-list {
+      margin-top: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .edu-item {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--gray-border);
+    }
+    .edu-item:last-child { border-bottom: none; }
+    .edu-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .edu-degree {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 2px;
+    }
+    .edu-institution {
+      font-size: 0.88rem;
+      color: var(--purple);
+    }
+    .edu-note {
+      font-size: 0.82rem;
+      color: var(--gray);
+      margin-top: 4px;
+    }
+
+    /* ============================================================
+       GOALS SECTION — Long-term vision (unique to your profile)
+       ============================================================ */
+    .goals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+    .goal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--gray-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .goal-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+    }
+    .goal-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+
+    /* ============================================================
+       CONTACT SECTION — Social links & email
+       ============================================================ */
+    #contact {
+      background: var(--code-bg);
+      border-radius: var(--radius) var(--radius) 0 0;
+      padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem);
+      max-width: 100%;
+      margin-top: 4rem;
+    }
+    .contact-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .contact-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: #F8F7FF;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.75rem;
+    }
+    .contact-sub {
+      color: #888780;
+      margin-bottom: 3rem;
+      font-size: 0.95rem;
+    }
+    /* Social link grid */
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      text-decoration: none;
+      color: #D3D1C7;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .social-link:hover {
+      background: rgba(83,74,183,0.2);
+      border-color: var(--purple);
+      color: #F8F7FF;
+    }
+    /* Platform icon dot */
+    .social-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Footer row inside contact */
+    .contact-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.8rem;
+      color: #5F5E5A;
+    }
+
+    /* ============================================================
+       RESPONSIVE — Mobile adjustments
+       ============================================================ */
+    @media (max-width: 768px) {
+      .nav-links { display: none; } /* Hide nav links on mobile */
+
+      /* Stack about grid vertically on mobile */
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+
+      /* Stack experience grid vertically on mobile */
+      .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .edu-item { grid-template-columns: 1fr; gap: 0.5rem; }
+
+      /* Smaller hero name */
+      .hero-name { font-size: 2.5rem; }
+
+      /* Stack contact footer */
+      .contact-footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+
+    /* ============================================================
+       ENTRANCE ANIMATIONS — Fade in on load
+       ============================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-inner > * {
+      animation: fadeUp 0.6s ease both;
+    }
+    /* Each child animates with staggered delay */
+    .hero-inner > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero-inner > *:nth-child(2) { animation-delay: 0.2s; }
+    .hero-inner > *:nth-child(3) { animation-delay: 0.3s; }
+    .hero-inner > *:nth-child(4) { animation-delay: 0.4s; }
+    .hero-inner > *:nth-child(5) { animation-delay: 0.5s; }
+    .hero-inner > *:nth-child(6) { animation-delay: 0.6s; }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       NAVIGATION
+       To add a new section: add a new <li> here + a matching
+       <section id="your-id"> further down the page
+       ============================================================ -->
+  <nav>
+    <a href="#hero" class="nav-brand">Saiful Islam Shah</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#goals">Goals</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ============================================================
+       HERO SECTION
+       ============================================================ -->
+  <section id="hero">
+    <div class="hero-inner">
+
+      <!-- Status chip — change text to update availability message -->
+      <div class="hero-chip">
+        <div class="dot-pulse"></div>
+        Available for freelance projects &amp; collabs
+      </div>
+
+      <!-- Your name — the .accent class colors a word purple -->
+      <h1 class="hero-name">
+        Saiful<br />Islam <span class="accent">Shah.</span>
+      </h1>
+
+      <!-- One-liner below your name -->
+      <p class="hero-tagline">
+        AI Agent Developer &amp; Founder of <strong>GoAxilo</strong> — building intelligent automation systems that save businesses time and scale their operations.
+      </p>
+
+      <!-- ----------------------------------------
+           CODE BLOCK "BUSINESS CARD"
+           To update: change the values in the green/amber text
+           ---------------------------------------- -->
+      <div class="hero-code">
+        <span class="code-keyword">const</span> <span class="code-var">developer</span> <span class="code-brace">= {</span><br />
+        &nbsp;&nbsp;<span class="code-key">name</span>: <span class="code-string">'Saiful Islam Shah'</span>,<br />
+        &nbsp;&nbsp;<span class="code-key">role</span>: <span class="code-string">'AI Agent Developer'</span>,<br />
+        &nbsp;&nbsp;<span class="code-key">company</span>: <span class="code-string">'GoAxilo (Founder)'</span>,<br />
+        &nbsp;&nbsp;<span class="code-key">skills</span>: <span class="code-brace">[</span><span class="code-string">'n8n'</span>, <span class="code-string">'Python'</span>, <span class="code-string">'LangChain'</span>, <span class="code-string">'Make'</span>, <span class="code-string">'Zapier'</span><span class="code-brace">]</span>,<br />
+        &nbsp;&nbsp;<span class="code-key">location</span>: <span class="code-string">'Dhaka, Bangladesh'</span>,<br />
+        &nbsp;&nbsp;<span class="code-key">goal</span>: <span class="code-string">'Automate everything. Scale anywhere.'</span>,<br />
+        <span class="code-brace">};</span>
+      </div>
+
+      <!-- CTA Buttons — update href to point to your resume / contact -->
+      <div class="hero-cta">
+        <a href="#contact" class="btn-primary">
+          Get in touch →
+        </a>
+        <a href="#projects" class="btn-secondary">
+          View my work
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ============================================================
+       ABOUT SECTION
+       Edit the paragraph text to update your bio
+       ============================================================ -->
+  <section id="about">
+    <p class="section-label">About me</p>
+    <h2 class="section-title">Who I am?</h2>
+
+    <div class="about-grid">
+      <div>
+        <!-- EDIT THIS PARAGRAPH TO UPDATE YOUR BIO -->
+        <p style="color: var(--text-muted); margin-bottom: 1rem;">
+          My name is Saiful Islam Shah. I am an AI Agent Developer and entrepreneur from Dhaka, Bangladesh, building intelligent automation solutions through my agency <strong>GoAxilo</strong>. I specialize in designing AI-powered workflows using n8n, Make, and Zapier that help businesses eliminate repetitive tasks and scale their operations.
+        </p>
+        <p style="color: var(--text-muted); margin-bottom: 1rem;">
+          I am also a Mathematics student at Dhaka College and a content creator focused on AI automation, entrepreneurship, and career guidance for Bangladeshi youth. My mission is to bridge the gap between cutting-edge AI technology and real-world business impact.
+        </p>
+        <p style="color: var(--text-muted);">
+          Alongside GoAxilo, I co-founded <strong>Limaar</strong> — a premium women's leather bag brand that I am growing toward becoming a global luxury label.
+        </p>
+      </div>
+
+      <div>
+        <!-- STAT CARDS — Change the numbers and labels to update -->
+        <div class="about-stats">
+          <div class="stat-card">
+            <div class="stat-num">1+</div>
+            <div class="stat-label">Year in AI automation</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">2</div>
+            <div class="stat-label">Startups founded</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">10yr</div>
+            <div class="stat-label">Vision: 2026–2036</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">BD</div>
+            <div class="stat-label">Dhaka, Bangladesh</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ============================================================
+       EXPERIENCE SECTION
+       To add a new experience: copy one .exp-item block
+       and edit the text inside it
+       ============================================================ -->
+  <section id="experience">
+    <p class="section-label">Experience</p>
+    <h2 class="section-title">What I've built &amp; done</h2>
+
+    <div class="exp-list">
+
+      <!-- Experience Item 1 -->
+      <div class="exp-item">
+        <div class="exp-meta">
+          <div class="exp-date">2025 – Present</div>
+          <div class="exp-company">GoAxilo</div>
+          <div class="exp-location">Dhaka, Bangladesh (Remote)</div>
+        </div>
+        <div class="exp-content">
+          <div class="exp-title">Founder &amp; AI Automation Developer</div>
+          <ul class="exp-bullets">
+            <li>Building AI automation workflows for businesses using n8n, Make, and Zapier as the core stack.</li>
+            <li>Designing end-to-end automation pipelines — from lead capture to CRM updates to automated reporting.</li>
+            <li>Developing AI Agent systems using LangChain and OpenRouter for intelligent task execution.</li>
+            <li>Participating in the Reply AI Agent Challenge 2026 (€20,000 prize pool) focused on fraud detection.</li>
+            <li>Building GoAxilo's brand identity, website, and client acquisition strategy from scratch.</li>
+          </ul>
+          <!-- TAGS — Add or remove tools/skills as needed -->
+          <div class="tags">
+            <span class="tag">n8n</span>
+            <span class="tag">LangChain</span>
+            <span class="tag">Make</span>
+            <span class="tag">Zapier</span>
+            <span class="tag">OpenRouter</span>
+            <span class="tag">Framer</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experience Item 2 -->
+      <div class="exp-item">
+        <div class="exp-meta">
+          <div class="exp-date">2024 – Present</div>
+          <div class="exp-company">Self-Employed</div>
+          <div class="exp-location">Remote</div>
+        </div>
+        <div class="exp-content">
+          <div class="exp-title">AI Content Creator &amp; Educator</div>
+          <ul class="exp-bullets">
+            <li>Creating educational content on AI automation, Python programming, and entrepreneurship for Bangladeshi youth.</li>
+            <li>Building a personal brand across YouTube, LinkedIn, Facebook, TikTok, and Instagram.</li>
+            <li>Producing tutorials and career guidance content to help young people enter the AI industry.</li>
+          </ul>
+          <div class="tags">
+            <span class="tag">YouTube</span>
+            <span class="tag">Content Creation</span>
+            <span class="tag">Personal Branding</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experience Item 3 -->
+      <div class="exp-item">
+        <div class="exp-meta">
+          <div class="exp-date">2024 – Present</div>
+          <div class="exp-company">Limaar</div>
+          <div class="exp-location">Dhaka, Bangladesh</div>
+        </div>
+        <div class="exp-content">
+          <div class="exp-title">Co-Founder — Premium Leather Brand</div>
+          <ul class="exp-bullets">
+            <li>Co-founded Limaar, a premium women's leather bag brand with vision of global luxury positioning.</li>
+            <li>Handling brand strategy, product positioning, and digital marketing.</li>
+            <li>Long-term goal: grow Limaar to a globally recognized brand in the fashion industry.</li>
+          </ul>
+          <div class="tags">
+            <span class="tag">Brand Strategy</span>
+            <span class="tag">E-commerce</span>
+            <span class="tag">Entrepreneurship</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ============================================================
+       SKILLS SECTION
+       Edit skill names and levels inside each .skill-group
+       Levels: learning | building | proficient
+       ============================================================ -->
+  <section id="skills">
+    <p class="section-label">Skills</p>
+    <h2 class="section-title">My tech stack</h2>
+
+    <div class="skills-grid">
+
+      <!-- Skill Group 1: AI & Automation -->
+      <div class="skill-group">
+        <div class="skill-group-header">
+          <!-- Change the emoji to match the group -->
+          <div class="skill-icon">🤖</div>
+          <div class="skill-group-title">AI & Automation</div>
+        </div>
+        <!-- Each .skill-item = one skill. Level class options:
+             level-proficient = purple (strong)
+             level-building   = amber (growing)
+             level-learning   = green (beginner) -->
+        <div class="skill-item">n8n <span class="skill-level level-proficient">Proficient</span></div>
+        <div class="skill-item">Make (Integromat) <span class="skill-level level-building">Building</span></div>
+        <div class="skill-item">Zapier <span class="skill-level level-building">Building</span></div>
+        <div class="skill-item">LangChain <span class="skill-level level-learning">Learning</span></div>
+        <div class="skill-item">OpenRouter <span class="skill-level level-building">Building</span></div>
+      </div>
+
+      <!-- Skill Group 2: Programming -->
+      <div class="skill-group">
+        <div class="skill-group-header">
+          <div class="skill-icon">💻</div>
+          <div class="skill-group-title">Programming</div>
+        </div>
+        <div class="skill-item">Python <span class="skill-level level-building">Building</span></div>
+        <div class="skill-item">NumPy <span class="skill-level level-learning">Learning</span></div>
+        <div class="skill-item">Pandas <span class="skill-level level-learning">Learning</span></div>
+        <div class="skill-item">HTML / CSS <span class="skill-level level-building">Building</span></div>
+        <div class="skill-item">JavaScript <span class="skill-level level-learning">Learning</span></div>
+      </div>
+
+      <!-- Skill Group 3: AI/ML (Theoretical) -->
+      <div class="skill-group">
+        <div class="skill-group-header">
+          <div class="skill-icon">🧠</div>
+          <div class="skill-group-title">AI & ML</div>
+        </div>
+        <div class="skill-item">Machine Learning <span class="skill-level level-learning">Learning</span></div>
+        <div class="skill-item">Agentic AI <span class="skill-level level-building">Building</span></div>
+        <div class="skill-item">Prompt Engineering <span class="skill-level level-proficient">Proficient</span></div>
+        <div class="skill-item">AI Workflows <span class="skill-level level-proficient">Proficient</span></div>
+      </div>
+
+      <!-- Skill Group 4: Business & Brand -->
+      <div class="skill-group">
+        <div class="skill-group-header">
+          <div class="skill-icon">🚀</div>
+          <div class="skill-group-title">Business & Brand</div>
+        </div>
+        <div class="skill-item">Startup Strategy <span class="skill-level level-building">Building</span></div>
+        <div class="skill-item">Brand Building <span class="skill-level level-proficient">Proficient</span></div>
+        <div class="skill-item">Content Creation <span class="skill-level level-proficient">Proficient</span></div>
+        <div class="skill-item">Framer / Web Design <span class="skill-level level-building">Building</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ============================================================
+       PROJECTS SECTION
+       Copy a .project-card to add more projects
+       ============================================================ -->
+  <section id="projects">
+    <p class="section-label">Projects</p>
+    <h2 class="section-title">Things I've built</h2>
+
+    <div class="projects-grid">
+
+      <!-- Project Card 1 -->
+      <div class="project-card">
+        <div class="project-code">
+          <span class="code-keyword">const</span> <span class="code-var">project</span> <span class="code-brace">= {</span><br />
+          &nbsp;&nbsp;<span class="code-key">name</span>: <span class="code-string">'GoAxilo Agency'</span>,<br />
+          &nbsp;&nbsp;<span class="code-key">tools</span>: <span class="code-brace">[</span><span class="code-string">'n8n'</span>, <span class="code-string">'Framer'</span>, <span class="code-string">'LangChain'</span><span class="code-brace">]</span>,<br />
+          &nbsp;&nbsp;<span class="code-key">role</span>: <span class="code-string">'Founder &amp; Developer'</span>,<br />
+          <span class="code-brace">};</span>
+        </div>
+        <div class="project-title">GoAxilo — AI Automation Agency</div>
+        <div class="project-desc">
+          Built the full brand identity, website, and service packages for GoAxilo — an AI automation agency offering workflow automation services ranging from Starter to Agency tier. Services include n8n-based pipelines, AI agent integration, and CRM automation.
+        </div>
+        <div class="tags">
+          <span class="tag">n8n</span>
+          <span class="tag">LangChain</span>
+          <span class="tag">Framer</span>
+          <span class="tag">Brand Identity</span>
+        </div>
+        <div class="project-links">
+          <!-- Update href to your live site URL -->
+          <a href="https://goaxilo.com" target="_blank" class="project-link">Live Site →</a>
+        </div>
+      </div>
+
+      <!-- Project Card 2 -->
+      <div class="project-card">
+        <div class="project-code">
+          <span class="code-keyword">const</span> <span class="code-var">project</span> <span class="code-brace">= {</span><br />
+          &nbsp;&nbsp;<span class="code-key">name</span>: <span class="code-string">'Reply AI Agent Challenge'</span>,<br />
+          &nbsp;&nbsp;<span class="code-key">tools</span>: <span class="code-brace">[</span><span class="code-string">'Python'</span>, <span class="code-string">'LangChain'</span>, <span class="code-string">'n8n'</span><span class="code-brace">]</span>,<br />
+          &nbsp;&nbsp;<span class="code-key">role</span>: <span class="code-string">'Workflow &amp; Integration Specialist'</span>,<br />
+          <span class="code-brace">};</span>
+        </div>
+        <div class="project-title">Fraud Detection AI Agent</div>
+        <div class="project-desc">
+          Participated in the Reply AI Agent Challenge 2026 (€20,000 prize pool). Built a fraud detection agent system using LangChain and Python. Served as the team's workflow and integration specialist, bridging n8n pipelines with the AI backend.
+        </div>
+        <div class="tags">
+          <span class="tag">Python</span>
+          <span class="tag">LangChain</span>
+          <span class="tag">Competition</span>
+          <span class="tag">Fraud Detection</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/MehrazRumman" target="_blank" class="project-link">GitHub →</a>
+        </div>
+      </div>
+
+      <!-- Project Card 3 -->
+      <div class="project-card">
+        <div class="project-code">
+          <span class="code-keyword">const</span> <span class="code-var">project</span> <span class="code-brace">= {</span><br />
+          &nbsp;&nbsp;<span class="code-key">name</span>: <span class="code-string">'Limaar Brand'</span>,<br />
+          &nbsp;&nbsp;<span class="code-key">tools</span>: <span class="code-brace">[</span><span class="code-string">'Brand Strategy'</span>, <span class="code-string">'E-Commerce'</span><span class="code-brace">]</span>,<br />
+          &nbsp;&nbsp;<span class="code-key">role</span>: <span class="code-string">'Co-Founder'</span>,<br />
+          <span class="code-brace">};</span>
+        </div>
+        <div class="project-title">Limaar — Premium Leather Brand</div>
+        <div class="project-desc">
+          Co-founded Limaar, a premium women's leather bag brand based in Bangladesh. Responsible for brand positioning, digital presence, and long-term strategy targeting global luxury market entry — inspired by brands like Gucci.
+        </div>
+        <div class="tags">
+          <span class="tag">Brand Strategy</span>
+          <span class="tag">Fashion</span>
+          <span class="tag">Startup</span>
+        </div>
+        <div class="project-links">
+          <!-- Update href when Limaar has a site -->
+          <a href="#" class="project-link">Coming soon →</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ============================================================
+       EDUCATION SECTION
+       Copy an .edu-item to add more education entries
+       ============================================================ -->
+  <section id="education">
+    <p class="section-label">Education</p>
+    <h2 class="section-title">Academic background</h2>
+
+    <div class="edu-list">
+
+      <div class="edu-item">
+        <div>
+          <div class="edu-year">2023 – Present</div>
+        </div>
+        <div>
+          <div class="edu-degree">B.S. in Mathematics (Honors)</div>
+          <div class="edu-institution">Dhaka College, Dhaka</div>
+          <div class="edu-note">Studying advanced mathematics while building AI skills in parallel.</div>
+        </div>
+      </div>
+
+      <div class="edu-item">
+        <div>
+          <div class="edu-year">Self-directed, 2024–Present</div>
+        </div>
+        <div>
+          <div class="edu-degree">AI &amp; Automation Engineering</div>
+          <div class="edu-institution">Online (Coursework, Projects &amp; Competition)</div>
+          <div class="edu-note">Python, NumPy, Pandas, LangChain, n8n, Machine Learning. Learning by building real products.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ============================================================
+       GOALS SECTION — Unique vision roadmap
+       Edit each .goal-card to update your milestones
+       ============================================================ -->
+  <section id="goals">
+    <p class="section-label">Vision 2026–2036</p>
+    <h2 class="section-title">Where I'm going</h2>
+
+    <div class="goals-grid">
+      <!-- Each card = one milestone. Change goal-year and goal-text -->
+      <div class="goal-card">
+        <div class="goal-year">2026</div>
+        <div class="goal-text">Get first GoAxilo clients. Win AI competition. Launch website.</div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-year">2027</div>
+        <div class="goal-text">Grow GoAxilo to 10+ clients. Reach 10k YouTube subscribers.</div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-year">2028</div>
+        <div class="goal-text">Apply to study AI abroad. Scale GoAxilo to retainer model.</div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-year">2030</div>
+        <div class="goal-text">Become a professional AI Engineer. Limaar goes global.</div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-year">2033</div>
+        <div class="goal-text">Top-level YouTuber on AI &amp; entrepreneurship. AI researcher.</div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-year">2036</div>
+        <div class="goal-text">Global AI brand. Multiple successful startups. AI research publications.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CONTACT SECTION — Dark background, social links
+       Update each href to your actual profile URLs
+       ============================================================ -->
+  <div id="contact">
+    <div class="contact-inner">
+      <h2 class="contact-title">Let's work together.</h2>
+      <p class="contact-sub">Open to freelance projects, agency collaborations, and AI automation work.</p>
+
+      <!-- SOCIAL LINKS — Update each href URL -->
+      <div class="social-grid">
+
+        <a href="mailto:saifulshah2004@gmail.com" class="social-link">
+          <div class="social-dot" style="background:#AFA9EC;"></div>
+          saifulshah2004@gmail.com
+        </a>
+
+        <a href="https://linkedin.com/in/saiful-islam-shah" target="_blank" class="social-link">
+          <div class="social-dot" style="background:#0A66C2;"></div>
+          LinkedIn
+        </a>
+
+        <a href="https://www.youtube.com/@Saiful_Islam_Shah78" target="_blank" class="social-link">
+          <div class="social-dot" style="background:#FF0000;"></div>
+          YouTube
+        </a>
+
+        <a href="https://github.com/MehrazRumman" target="_blank" class="social-link">
+          <div class="social-dot" style="background:#F8F7FF;"></div>
+          GitHub
+        </a>
+
+        <a href="https://facebook.com/Saiful.Islam.Shah78" target="_blank" class="social-link">
+          <div class="social-dot" style="background:#1877F2;"></div>
+          Facebook
+        </a>
+
+        <a href="https://instagram.com/saiful_islam_shah78" target="_blank" class="social-link">
+          <div class="social-dot" style="background:#E1306C;"></div>
+          Instagram
+        </a>
+
+        <a href="https://x.com/Saiful_Shah78" target="_blank" class="social-link">
+          <div class="social-dot" style="background:#F8F7FF;"></div>
+          X (Twitter)
+        </a>
+
+        <a href="https://www.tiktok.com/@saiful_islam_shah" target="_blank" class="social-link">
+          <div class="social-dot" style="background:#EE1D52;"></div>
+          TikTok
+        </a>
+
+        <a href="http://t.me/SaifulDC" target="_blank" class="social-link">
+          <div class="social-dot" style="background:#26A5E4;"></div>
+          Telegram
+        </a>
+
+        <a href="https://goaxilo.com" target="_blank" class="social-link">
+          <div class="social-dot" style="background:#534AB7;"></div>
+          GoAxilo.com
+        </a>
+
+      </div>
+
+      <!-- Footer row -->
+      <div class="contact-footer">
+        <span>© 2025 Saiful Islam Shah — All rights reserved.</span>
+        <span>Built with HTML, CSS &amp; ❤ from Dhaka, Bangladesh</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
