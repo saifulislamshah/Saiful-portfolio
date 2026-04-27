@@ -4,497 +4,621 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Saiful Islam Shah — AI Agent Developer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
-    /* ============================================================
-       CSS VARIABLES — Edit colors here to change the whole theme
-       ============================================================ */
+    /* =====================================================
+       DESIGN TOKENS — change these to retheme everything
+       ===================================================== */
     :root {
-      --purple:       #534AB7; /* GoAxilo brand purple */
-      --purple-dark:  #3C3489;
-      --purple-light: #EEEDFE;
-      --purple-mid:   #AFA9EC;
-      --black:        #0D0D0F;
-      --white:        #F8F7FF;
-      --gray:         #888780;
-      --gray-light:   #F1EFE8;
-      --gray-border:  #D3D1C7;
-      --text-primary: #0D0D0F;
-      --text-muted:   #5F5E5A;
-      --card-bg:      #ffffff;
-      --bg:           #F8F7FF;
-      --code-bg:      #0D0D0F;
-      --radius:       12px;
-      --radius-sm:    8px;
+      --bg:           #080810;       /* main background */
+      --surface:      #0F0F1A;       /* card background */
+      --surface2:     #151525;       /* elevated cards */
+      --border:       rgba(255,255,255,0.07);
+      --border-glow:  rgba(138,107,255,0.35);
+      --purple:       #8A6BFF;       /* main accent */
+      --purple-dim:   #4B3D9A;
+      --purple-deep:  #1A1430;
+      --green:        #00E5A0;       /* available indicator */
+      --white:        #F0EEFF;
+      --muted:        #6B6880;
+      --muted2:       #3D3B52;
+      --text:         #E8E4FF;
+      --mono:         'DM Mono', monospace;
+      --display:      'Cabinet Grotesk', sans-serif;
+      --r:            14px;
+      --r-sm:         8px;
     }
 
-    /* ============================================================
-       RESET & BASE — Don't edit unless you know CSS well
-       ============================================================ */
+    /* =====================================================
+       RESET
+       ===================================================== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
+
     body {
-      font-family: 'DM Sans', sans-serif;
+      font-family: var(--display);
       background: var(--bg);
-      color: var(--text-primary);
+      color: var(--text);
       font-size: 16px;
       line-height: 1.7;
       overflow-x: hidden;
+      cursor: none; /* custom cursor */
     }
 
-    /* ============================================================
-       NAVIGATION — The top sticky menu bar
-       ============================================================ */
-    nav {
-      /* Change background/border to restyle the navbar */
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(248, 247, 255, 0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--gray-border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 clamp(1.5rem, 5vw, 4rem);
-      height: 64px;
+    /* =====================================================
+       CUSTOM CURSOR — the small purple dot that follows mouse
+       ===================================================== */
+    .cursor {
+      width: 10px; height: 10px;
+      background: var(--purple);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease;
+      mix-blend-mode: screen;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(138,107,255,0.5);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      transition: all 0.12s ease;
     }
 
-    /* Logo / Brand name in nav */
-    .nav-brand {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1.25rem;
-      color: var(--purple);
-      text-decoration: none;
-      letter-spacing: -0.02em;
-    }
-
-    /* Nav link list */
-    .nav-links {
-      display: flex;
-      list-style: none;
-      gap: 2rem;
-    }
-    .nav-links a {
-      font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--purple); }
-
-    /* ============================================================
-       SECTION LAYOUT — Shared layout for every section
-       ============================================================ */
-    section {
-      padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem);
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    /* Thin decorative divider between sections */
-    .section-divider {
-      width: 100%;
-      height: 1px;
-      background: var(--gray-border);
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    /* Section heading label (small uppercase above title) */
-    .section-label {
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--purple);
-      margin-bottom: 0.5rem;
-    }
-
-    /* Main section title */
-    .section-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      color: var(--text-primary);
-      line-height: 1.15;
-      margin-bottom: 1rem;
-    }
-
-    /* ============================================================
-       HERO SECTION — The very first thing visitors see
-       Edit your intro text, tagline, and social links here
-       ============================================================ */
-    #hero {
-      min-height: calc(100vh - 64px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding-top: 5rem;
-      padding-bottom: 5rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Decorative background grid dots — purely visual */
-    #hero::before {
+    /* =====================================================
+       NOISE OVERLAY — adds film grain texture to background
+       ===================================================== */
+    body::before {
       content: '';
-      position: absolute;
+      position: fixed;
       inset: 0;
-      background-image: radial-gradient(circle, var(--gray-border) 1px, transparent 1px);
-      background-size: 32px 32px;
-      opacity: 0.5;
-      z-index: 0;
-    }
-
-    /* Purple gradient glow — decorative */
-    #hero::after {
-      content: '';
-      position: absolute;
-      top: -120px;
-      right: -120px;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(83,74,183,0.12) 0%, transparent 70%);
-      z-index: 0;
-    }
-
-    .hero-inner {
-      position: relative;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 200px;
+      opacity: 0.35;
+      pointer-events: none;
       z-index: 1;
     }
 
-    /* Greeting chip at top */
-    .hero-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--purple-light);
-      border: 1px solid var(--purple-mid);
-      border-radius: 999px;
-      padding: 6px 16px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--purple-dark);
-      margin-bottom: 2rem;
-    }
-
-    /* Pulsing green dot — "available for work" indicator */
-    .dot-pulse {
-      width: 8px;
-      height: 8px;
+    /* =====================================================
+       GLOW ORBS — decorative background lighting
+       Edit top/left/width to move them around
+       ===================================================== */
+    .orb {
+      position: fixed;
       border-radius: 50%;
-      background: #1D9E75;
-      animation: pulse 2s infinite;
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
     }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+    .orb-1 {
+      width: 500px; height: 500px;
+      background: rgba(138,107,255,0.08);
+      top: -100px; right: -100px;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: rgba(0,229,160,0.04);
+      bottom: 20%; left: -150px;
+    }
+    .orb-3 {
+      width: 300px; height: 300px;
+      background: rgba(138,107,255,0.06);
+      bottom: -50px; right: 20%;
     }
 
-    /* Main hero heading — your name */
-    .hero-name {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(2.8rem, 7vw, 5.5rem);
+    /* =====================================================
+       LAYOUT WRAPPER
+       ===================================================== */
+    .page-wrap {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* =====================================================
+       NAVIGATION
+       ===================================================== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 clamp(1.5rem, 5vw, 5rem);
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(8,8,16,0.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--purple);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      opacity: 0.9;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+    }
+    .nav-links a {
+      font-size: 0.72rem;
+      font-family: var(--mono);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    /* =====================================================
+       SECTION WRAPPER
+       ===================================================== */
+    section {
+      padding: clamp(5rem, 10vw, 8rem) clamp(1.5rem, 5vw, 5rem);
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--purple);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-eyebrow::after {
+      content: '';
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: var(--purple-dim);
+    }
+
+    .section-heading {
+      font-size: clamp(2rem, 5vw, 3.2rem);
       font-weight: 800;
       letter-spacing: -0.04em;
-      line-height: 1.0;
-      color: var(--text-primary);
-      margin-bottom: 0.5rem;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 1rem;
     }
 
-    /* Highlighted purple word in hero name */
-    .hero-name .accent {
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* =====================================================
+       HERO SECTION
+       ===================================================== */
+    #hero {
+      min-height: 100vh;
+      padding-top: 68px;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    /* LEFT SIDE */
+    .hero-left {}
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(138,107,255,0.1);
+      border: 1px solid rgba(138,107,255,0.25);
+      border-radius: 999px;
+      padding: 7px 18px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
       color: var(--purple);
+      letter-spacing: 0.06em;
+      margin-bottom: 2.5rem;
     }
 
-    /* Hero subtitle / tagline */
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: var(--text-muted);
-      max-width: 560px;
-      margin: 1.5rem 0 2.5rem;
+    /* Pulsing green dot */
+    .pulse {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: glow-pulse 2.5s infinite;
+    }
+    @keyframes glow-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0,229,160,0.5); }
+      50% { box-shadow: 0 0 0 6px rgba(0,229,160,0); }
+    }
+
+    /* Main headline */
+    .hero-name {
+      font-size: clamp(3rem, 7vw, 5.8rem);
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      line-height: 0.95;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+    /* Purple gradient on last name */
+    .hero-name .grad {
+      background: linear-gradient(135deg, var(--purple) 0%, #C4B0FF 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+      line-height: 1.75;
       font-weight: 400;
     }
+    .hero-sub strong { color: var(--text); font-weight: 600; }
 
-    /* ----------------------------------------
-       CODE BLOCK — The animated "business card"
-       This is the cool code-style intro block
-       Change the values inside to update your info
-       ---------------------------------------- */
+    /* Code block business card */
     .hero-code {
-      background: var(--code-bg);
-      border-radius: var(--radius);
-      padding: 1.5rem 2rem;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.82rem;
-      line-height: 1.9;
-      max-width: 520px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--purple);
+      border-radius: var(--r);
+      padding: 1.4rem 1.8rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      line-height: 2;
       margin-bottom: 2.5rem;
-      /* Subtle left border accent */
-      border-left: 3px solid var(--purple);
+      position: relative;
+      overflow: hidden;
     }
-
-    /* Each syntax color used in the code block */
-    .code-keyword  { color: #AFA9EC; }  /* const, let, var */
-    .code-var      { color: #F8F7FF; }  /* variable name */
-    .code-string   { color: #9FE1CB; }  /* "string values" */
-    .code-key      { color: #FAC775; }  /* object keys */
-    .code-brace    { color: #888780; }  /* { } [ ] */
-    .code-comment  { color: #5F5E5A; }  /* // comments */
-
-    /* CTA Buttons in hero */
-    .hero-cta {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
+    /* Top bar dots on code block */
+    .hero-code::before {
+      content: '● ● ●';
+      position: absolute;
+      top: 10px; left: 16px;
+      font-size: 0.5rem;
+      color: var(--muted2);
+      letter-spacing: 4px;
     }
+    .hero-code-inner { padding-top: 1rem; }
+    .ck { color: #AFA9EC; }   /* keyword */
+    .cv { color: var(--white); } /* variable */
+    .cs { color: #7ECFB3; }   /* string */
+    .cp { color: #F0C070; }   /* key */
+    .cm { color: var(--muted); } /* comment */
+    .cb { color: var(--muted2); } /* bracket */
 
-    /* Primary filled button */
-    .btn-primary {
+    /* CTA buttons */
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding: 13px 26px;
+      border-radius: var(--r-sm);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-fill {
       background: var(--purple);
-      color: #ffffff;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.9rem;
-      padding: 12px 24px;
-      border-radius: var(--radius-sm);
-      transition: background 0.2s, transform 0.15s;
+      color: #fff;
+      border: 1px solid var(--purple);
     }
-    .btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
-
-    /* Secondary outlined button */
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+    .btn-fill:hover {
       background: transparent;
-      color: var(--text-primary);
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.9rem;
-      padding: 12px 24px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--gray-border);
-      transition: border-color 0.2s, transform 0.15s;
+      color: var(--purple);
     }
-    .btn-secondary:hover { border-color: var(--purple); transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover {
+      border-color: var(--purple);
+      color: var(--white);
+    }
 
-    /* ============================================================
-       ABOUT SECTION — Your bio and personality
-       Edit the paragraph text and stat numbers below
-       ============================================================ */
+    /* RIGHT SIDE — Photo card */
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* Photo container */
+    .photo-wrap {
+      position: relative;
+      border-radius: var(--r);
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      border: 1px solid var(--border);
+    }
+    /* Purple gradient overlay on photo bottom */
+    .photo-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 40%,
+        rgba(8,8,16,0.9) 100%
+      );
+    }
+    .photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      filter: grayscale(20%) contrast(1.05);
+      transition: filter 0.5s;
+    }
+    .photo-wrap:hover img {
+      filter: grayscale(0%) contrast(1.05);
+    }
+
+    /* Name overlay on photo */
+    .photo-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1.5rem;
+      z-index: 2;
+    }
+    .photo-label-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
+    .photo-label-role {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--purple);
+      letter-spacing: 0.08em;
+      margin-top: 2px;
+    }
+
+    /* Small info chips below photo */
+    .hero-chips {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 0.75rem 1rem;
+    }
+    .chip-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .chip-value {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-top: 2px;
+    }
+
+    /* =====================================================
+       ABOUT SECTION
+       ===================================================== */
     .about-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 4rem;
+      gap: 5rem;
       align-items: start;
       margin-top: 3rem;
     }
+    .about-text p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      line-height: 1.85;
+    }
+    .about-text p strong { color: var(--text); }
 
-    /* Numbered stat cards (goals / metrics) */
     .about-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
-      margin-top: 2rem;
     }
-    .stat-card {
-      background: var(--card-bg);
-      border: 1px solid var(--gray-border);
-      border-radius: var(--radius);
-      padding: 1.25rem;
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 1.5rem;
+      transition: border-color 0.2s;
     }
-    /* Large number in stat card */
+    .stat-box:hover { border-color: var(--border-glow); }
     .stat-num {
-      font-family: 'Syne', sans-serif;
-      font-size: 2rem;
-      font-weight: 700;
+      font-size: 2.2rem;
+      font-weight: 800;
       color: var(--purple);
       line-height: 1;
+      letter-spacing: -0.04em;
     }
-    /* Label below number */
     .stat-label {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      margin-top: 4px;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-top: 6px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
-    /* ============================================================
-       EXPERIENCE SECTION — Work history timeline
-       Add more .exp-item blocks to add more jobs
-       ============================================================ */
+    /* =====================================================
+       EXPERIENCE SECTION
+       ===================================================== */
     .exp-list {
       margin-top: 3rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
     }
-
-    /* Single experience entry */
     .exp-item {
       display: grid;
-      grid-template-columns: 200px 1fr;
-      gap: 2rem;
+      grid-template-columns: 180px 1fr;
+      gap: 3rem;
       padding: 2.5rem 0;
-      border-bottom: 1px solid var(--gray-border);
-      position: relative;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.2s;
     }
     .exp-item:first-child { padding-top: 0; }
     .exp-item:last-child { border-bottom: none; }
+    .exp-item:hover { padding-left: 8px; }
 
-    /* Date / company column */
-    .exp-meta { }
     .exp-date {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      font-family: 'DM Mono', monospace;
-      letter-spacing: 0.05em;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      padding-top: 4px;
     }
-    .exp-company {
-      font-weight: 500;
-      font-size: 0.88rem;
+    .exp-co {
+      font-size: 0.8rem;
       color: var(--purple);
-      margin-top: 4px;
-    }
-    .exp-location {
-      font-size: 0.78rem;
-      color: var(--gray);
-      margin-top: 2px;
-    }
-
-    /* Role title and description column */
-    .exp-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.1rem;
       font-weight: 600;
-      margin-bottom: 0.75rem;
-      color: var(--text-primary);
+      margin-top: 6px;
     }
 
-    /* Bullet list inside experience */
+    .exp-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
     .exp-bullets {
       list-style: none;
       display: flex;
       flex-direction: column;
       gap: 0.4rem;
+      margin-bottom: 1rem;
     }
     .exp-bullets li {
-      font-size: 0.9rem;
-      color: var(--text-muted);
+      font-size: 0.88rem;
+      color: var(--muted);
       padding-left: 1.25rem;
       position: relative;
     }
-    /* Custom bullet dot */
     .exp-bullets li::before {
-      content: '→';
+      content: '›';
       position: absolute;
       left: 0;
       color: var(--purple);
-      font-size: 0.8rem;
+      font-size: 1rem;
     }
 
-    /* Tag chips used inside experience */
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 1rem;
-    }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .tag {
-      font-size: 0.72rem;
-      font-family: 'DM Mono', monospace;
-      background: var(--purple-light);
-      color: var(--purple-dark);
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      background: var(--purple-deep);
+      color: var(--purple);
+      border: 1px solid rgba(138,107,255,0.2);
       padding: 3px 10px;
       border-radius: 999px;
-      font-weight: 500;
+      letter-spacing: 0.05em;
     }
 
-    /* ============================================================
-       SKILLS SECTION — Your tech skills grid
-       Edit the skill groups and items inside to match yours
-       ============================================================ */
+    /* =====================================================
+       SKILLS SECTION
+       ===================================================== */
     .skills-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.25rem;
       margin-top: 3rem;
     }
     .skill-group {
-      background: var(--card-bg);
-      border: 1px solid var(--gray-border);
-      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
       padding: 1.5rem;
+      transition: border-color 0.2s;
     }
-    /* Skill group icon + title row */
-    .skill-group-header {
+    .skill-group:hover { border-color: var(--border-glow); }
+    .skill-group-head {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
     }
-    /* Square icon badge */
     .skill-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: var(--purple-light);
+      width: 34px; height: 34px;
+      border-radius: var(--r-sm);
+      background: var(--purple-deep);
+      border: 1px solid rgba(138,107,255,0.2);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
     }
     .skill-group-title {
-      font-weight: 600;
-      font-size: 0.88rem;
-      font-family: 'Syne', sans-serif;
-    }
-    /* Individual skill pill */
-    .skill-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 6px 0;
-      border-bottom: 1px solid var(--gray-light);
       font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--white);
     }
-    .skill-item:last-child { border-bottom: none; }
-    /* Skill level badge — edit text inside each */
-    .skill-level {
-      font-size: 0.68rem;
-      font-family: 'DM Mono', monospace;
+    .skill-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      font-size: 0.83rem;
+      color: var(--muted);
+    }
+    .skill-row:last-child { border-bottom: none; }
+    .skill-badge {
+      font-family: var(--mono);
+      font-size: 0.6rem;
       padding: 2px 8px;
       border-radius: 999px;
+      letter-spacing: 0.05em;
     }
-    /* Color variants for skill level */
-    .level-learning { background: #EAF3DE; color: #3B6D11; }
-    .level-building { background: #FAEEDA; color: #854F0B; }
-    .level-proficient { background: var(--purple-light); color: var(--purple-dark); }
+    .lv-pro  { background: rgba(138,107,255,0.15); color: var(--purple); }
+    .lv-bld  { background: rgba(240,192,112,0.12); color: #F0C070; }
+    .lv-learn{ background: rgba(0,229,160,0.1);    color: var(--green); }
 
-    /* ============================================================
-       PROJECTS SECTION — Portfolio projects
-       Copy a .project-card block to add more projects
-       ============================================================ */
+    /* =====================================================
+       PROJECTS SECTION
+       ===================================================== */
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 1.25rem;
       margin-top: 3rem;
     }
-
     .project-card {
-      background: var(--card-bg);
-      border: 1px solid var(--gray-border);
-      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
       padding: 1.75rem;
       display: flex;
       flex-direction: column;
@@ -502,739 +626,814 @@
       transition: border-color 0.2s, transform 0.2s;
     }
     .project-card:hover {
-      border-color: var(--purple-mid);
-      transform: translateY(-3px);
+      border-color: var(--border-glow);
+      transform: translateY(-4px);
     }
-
-    /* Project code block header (same style as hero) */
     .project-code {
-      background: var(--code-bg);
-      border-radius: var(--radius-sm);
-      padding: 1rem 1.25rem;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.75rem;
-      line-height: 1.8;
+      background: var(--bg);
+      border: 1px solid var(--border);
       border-left: 2px solid var(--purple);
+      border-radius: var(--r-sm);
+      padding: 1rem 1.25rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      line-height: 1.9;
     }
-
     .project-title {
-      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
       font-weight: 700;
-      font-size: 1.05rem;
+      color: var(--white);
+      letter-spacing: -0.02em;
     }
     .project-desc {
-      font-size: 0.88rem;
-      color: var(--text-muted);
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.7;
       flex: 1;
     }
-
-    /* Links row at bottom of project card */
     .project-links {
       display: flex;
       gap: 1rem;
       padding-top: 0.75rem;
-      border-top: 1px solid var(--gray-light);
+      border-top: 1px solid var(--border);
     }
     .project-link {
-      font-size: 0.8rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
       color: var(--purple);
       text-decoration: none;
-      font-weight: 500;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
     }
-    .project-link:hover { text-decoration: underline; }
+    .project-link:hover { color: #C4B0FF; }
 
-    /* ============================================================
-       EDUCATION SECTION — Academic background
-       ============================================================ */
+    /* =====================================================
+       EDUCATION SECTION
+       ===================================================== */
     .edu-list {
       margin-top: 3rem;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
     }
     .edu-item {
       display: grid;
       grid-template-columns: 200px 1fr;
-      gap: 2rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--gray-border);
+      gap: 3rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: padding-left 0.2s;
     }
+    .edu-item:first-child { padding-top: 0; }
     .edu-item:last-child { border-bottom: none; }
+    .edu-item:hover { padding-left: 8px; }
     .edu-year {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.78rem;
-      color: var(--text-muted);
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      padding-top: 4px;
+    }
+    .edu-inst {
+      font-size: 0.8rem;
+      color: var(--purple);
+      font-weight: 600;
+      margin-top: 6px;
     }
     .edu-degree {
-      font-family: 'Syne', sans-serif;
-      font-weight: 600;
-      font-size: 1rem;
-      margin-bottom: 2px;
-    }
-    .edu-institution {
-      font-size: 0.88rem;
-      color: var(--purple);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
     }
     .edu-note {
-      font-size: 0.82rem;
-      color: var(--gray);
-      margin-top: 4px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.65;
     }
 
-    /* ============================================================
-       GOALS SECTION — Long-term vision (unique to your profile)
-       ============================================================ */
+    /* =====================================================
+       GOALS / VISION SECTION
+       ===================================================== */
     .goals-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
       margin-top: 3rem;
     }
     .goal-card {
-      background: var(--card-bg);
-      border: 1px solid var(--gray-border);
-      border-radius: var(--radius);
-      padding: 1.5rem 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 1.5rem;
+      transition: border-color 0.2s;
     }
+    .goal-card:hover { border-color: var(--border-glow); }
     .goal-year {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      letter-spacing: 0.08em;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--purple);
+      letter-spacing: 0.12em;
+      margin-bottom: 0.5rem;
     }
     .goal-text {
-      font-family: 'Syne', sans-serif;
-      font-weight: 600;
       font-size: 0.9rem;
-      line-height: 1.35;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.4;
     }
 
-    /* ============================================================
-       CONTACT SECTION — Social links & email
-       ============================================================ */
+    /* =====================================================
+       CONTACT / FOOTER SECTION
+       ===================================================== */
     #contact {
-      background: var(--code-bg);
-      border-radius: var(--radius) var(--radius) 0 0;
-      padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem);
-      max-width: 100%;
-      margin-top: 4rem;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 5rem);
     }
     .contact-inner {
-      max-width: 1100px;
+      max-width: 1120px;
       margin: 0 auto;
     }
-    .contact-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(2rem, 5vw, 3.5rem);
+    .contact-headline {
+      font-size: clamp(2.5rem, 6vw, 5rem);
       font-weight: 800;
-      color: #F8F7FF;
-      letter-spacing: -0.04em;
+      letter-spacing: -0.05em;
+      line-height: 1.0;
+      color: var(--white);
       margin-bottom: 0.75rem;
     }
-    .contact-sub {
-      color: #888780;
-      margin-bottom: 3rem;
-      font-size: 0.95rem;
+    /* The accent word in headline */
+    .contact-headline .grad {
+      background: linear-gradient(135deg, var(--purple), #C4B0FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    /* Social link grid */
+    .contact-sub {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 3rem;
+      max-width: 480px;
+    }
+
     .social-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem;
       margin-bottom: 3rem;
     }
     .social-link {
       display: flex;
       align-items: center;
       gap: 12px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: var(--radius-sm);
-      padding: 14px 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 13px 16px;
       text-decoration: none;
-      color: #D3D1C7;
-      font-size: 0.85rem;
-      font-weight: 500;
-      transition: background 0.2s, border-color 0.2s;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      transition: all 0.2s;
     }
     .social-link:hover {
-      background: rgba(83,74,183,0.2);
-      border-color: var(--purple);
-      color: #F8F7FF;
+      border-color: var(--border-glow);
+      color: var(--white);
+      background: var(--purple-deep);
     }
-    /* Platform icon dot */
-    .social-dot {
-      width: 8px;
-      height: 8px;
+    .sdot {
+      width: 7px; height: 7px;
       border-radius: 50%;
       flex-shrink: 0;
     }
 
-    /* Footer row inside contact */
     .contact-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding-top: 2rem;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      font-size: 0.8rem;
-      color: #5F5E5A;
+      border-top: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--muted2);
+      letter-spacing: 0.06em;
     }
 
-    /* ============================================================
-       RESPONSIVE — Mobile adjustments
-       ============================================================ */
-    @media (max-width: 768px) {
-      .nav-links { display: none; } /* Hide nav links on mobile */
-
-      /* Stack about grid vertically on mobile */
-      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-
-      /* Stack experience grid vertically on mobile */
-      .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
-      .edu-item { grid-template-columns: 1fr; gap: 0.5rem; }
-
-      /* Smaller hero name */
-      .hero-name { font-size: 2.5rem; }
-
-      /* Stack contact footer */
-      .contact-footer { flex-direction: column; gap: 1rem; text-align: center; }
+    /* =====================================================
+       SCROLL ANIMATIONS
+       ===================================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    /* ============================================================
-       ENTRANCE ANIMATIONS — Fade in on load
-       ============================================================ */
+    /* Hero stagger animations */
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .hero-inner > * {
-      animation: fadeUp 0.6s ease both;
+    .hero-left > * {
+      animation: fadeUp 0.7s ease both;
     }
-    /* Each child animates with staggered delay */
-    .hero-inner > *:nth-child(1) { animation-delay: 0.1s; }
-    .hero-inner > *:nth-child(2) { animation-delay: 0.2s; }
-    .hero-inner > *:nth-child(3) { animation-delay: 0.3s; }
-    .hero-inner > *:nth-child(4) { animation-delay: 0.4s; }
-    .hero-inner > *:nth-child(5) { animation-delay: 0.5s; }
-    .hero-inner > *:nth-child(6) { animation-delay: 0.6s; }
+    .hero-left > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero-left > *:nth-child(2) { animation-delay: 0.2s; }
+    .hero-left > *:nth-child(3) { animation-delay: 0.35s; }
+    .hero-left > *:nth-child(4) { animation-delay: 0.5s; }
+    .hero-left > *:nth-child(5) { animation-delay: 0.65s; }
+    .hero-right {
+      animation: fadeUp 0.8s ease 0.3s both;
+    }
+
+    /* =====================================================
+       RESPONSIVE
+       ===================================================== */
+    @media (max-width: 900px) {
+      #hero { grid-template-columns: 1fr; padding-top: 88px; }
+      .hero-right { order: -1; max-width: 320px; }
+      .photo-wrap { aspect-ratio: 1/1; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .edu-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .goals-grid { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .goals-grid { grid-template-columns: 1fr; }
+      .hero-chips { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- ============================================================
-       NAVIGATION
-       To add a new section: add a new <li> here + a matching
-       <section id="your-id"> further down the page
-       ============================================================ -->
-  <nav>
-    <a href="#hero" class="nav-brand">Saiful Islam Shah</a>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#education">Education</a></li>
-      <li><a href="#goals">Goals</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+  <!-- Custom cursor elements -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
 
-  <!-- ============================================================
-       HERO SECTION
-       ============================================================ -->
-  <section id="hero">
-    <div class="hero-inner">
+  <!-- Background glow orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
 
-      <!-- Status chip — change text to update availability message -->
-      <div class="hero-chip">
-        <div class="dot-pulse"></div>
-        Available for freelance projects &amp; collabs
-      </div>
+  <div class="page-wrap">
 
-      <!-- Your name — the .accent class colors a word purple -->
-      <h1 class="hero-name">
-        Saiful<br />Islam <span class="accent">Shah.</span>
-      </h1>
+    <!-- =====================================================
+         NAVIGATION
+         Add <li><a href="#section-id">Label</a></li> for new sections
+         ===================================================== -->
+    <nav>
+      <a href="#hero" class="nav-logo">saiful.dev</a>
+      <ul class="nav-links">
+        <li><a href="#about">about</a></li>
+        <li><a href="#experience">experience</a></li>
+        <li><a href="#skills">skills</a></li>
+        <li><a href="#projects">projects</a></li>
+        <li><a href="#education">education</a></li>
+        <li><a href="#goals">goals</a></li>
+        <li><a href="#contact">contact</a></li>
+      </ul>
+    </nav>
 
-      <!-- One-liner below your name -->
-      <p class="hero-tagline">
-        AI Agent Developer &amp; Founder of <strong>GoAxilo</strong> — building intelligent automation systems that save businesses time and scale their operations.
-      </p>
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+    <section id="hero">
 
-      <!-- ----------------------------------------
-           CODE BLOCK "BUSINESS CARD"
-           To update: change the values in the green/amber text
-           ---------------------------------------- -->
-      <div class="hero-code">
-        <span class="code-keyword">const</span> <span class="code-var">developer</span> <span class="code-brace">= {</span><br />
-        &nbsp;&nbsp;<span class="code-key">name</span>: <span class="code-string">'Saiful Islam Shah'</span>,<br />
-        &nbsp;&nbsp;<span class="code-key">role</span>: <span class="code-string">'AI Agent Developer'</span>,<br />
-        &nbsp;&nbsp;<span class="code-key">company</span>: <span class="code-string">'GoAxilo (Founder)'</span>,<br />
-        &nbsp;&nbsp;<span class="code-key">skills</span>: <span class="code-brace">[</span><span class="code-string">'n8n'</span>, <span class="code-string">'Python'</span>, <span class="code-string">'LangChain'</span>, <span class="code-string">'Make'</span>, <span class="code-string">'Zapier'</span><span class="code-brace">]</span>,<br />
-        &nbsp;&nbsp;<span class="code-key">location</span>: <span class="code-string">'Dhaka, Bangladesh'</span>,<br />
-        &nbsp;&nbsp;<span class="code-key">goal</span>: <span class="code-string">'Automate everything. Scale anywhere.'</span>,<br />
-        <span class="code-brace">};</span>
-      </div>
+      <!-- LEFT: Photo + chips -->
+      <div class="hero-right">
 
-      <!-- CTA Buttons — update href to point to your resume / contact -->
-      <div class="hero-cta">
-        <a href="#contact" class="btn-primary">
-          Get in touch →
-        </a>
-        <a href="#projects" class="btn-secondary">
-          View my work
-        </a>
-      </div>
-
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- ============================================================
-       ABOUT SECTION
-       Edit the paragraph text to update your bio
-       ============================================================ -->
-  <section id="about">
-    <p class="section-label">About me</p>
-    <h2 class="section-title">Who I am?</h2>
-
-    <div class="about-grid">
-      <div>
-        <!-- EDIT THIS PARAGRAPH TO UPDATE YOUR BIO -->
-        <p style="color: var(--text-muted); margin-bottom: 1rem;">
-          My name is Saiful Islam Shah. I am an AI Agent Developer and entrepreneur from Dhaka, Bangladesh, building intelligent automation solutions through my agency <strong>GoAxilo</strong>. I specialize in designing AI-powered workflows using n8n, Make, and Zapier that help businesses eliminate repetitive tasks and scale their operations.
-        </p>
-        <p style="color: var(--text-muted); margin-bottom: 1rem;">
-          I am also a Mathematics student at Dhaka College and a content creator focused on AI automation, entrepreneurship, and career guidance for Bangladeshi youth. My mission is to bridge the gap between cutting-edge AI technology and real-world business impact.
-        </p>
-        <p style="color: var(--text-muted);">
-          Alongside GoAxilo, I co-founded <strong>Limaar</strong> — a premium women's leather bag brand that I am growing toward becoming a global luxury label.
-        </p>
-      </div>
-
-      <div>
-        <!-- STAT CARDS — Change the numbers and labels to update -->
-        <div class="about-stats">
-          <div class="stat-card">
-            <div class="stat-num">1+</div>
-            <div class="stat-label">Year in AI automation</div>
+        <!-- Photo card -->
+        <!-- TO UPDATE PHOTO: Change the src URL below -->
+        <div class="photo-wrap">
+          <img
+            src="https://res.cloudinary.com/dwllc0fbj/image/upload/v1777320771/WhatsApp_Image_2026-03-29_at_4.32.32_PM_1_1_letgnh.jpg"
+            alt="Saiful Islam Shah — AI Agent Developer"
+          />
+          <div class="photo-label">
+            <div class="photo-label-name">Saiful Islam Shah</div>
+            <div class="photo-label-role">AI Agent Developer · GoAxilo Founder</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-num">2</div>
-            <div class="stat-label">Startups founded</div>
+        </div>
+
+        <!-- Info chips below photo -->
+        <div class="hero-chips">
+          <div class="chip">
+            <div class="chip-label">Location</div>
+            <div class="chip-value">Dhaka, BD</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-num">10yr</div>
-            <div class="stat-label">Vision: 2026–2036</div>
+          <div class="chip">
+            <div class="chip-label">Focus</div>
+            <div class="chip-value">AI Automation</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-num">BD</div>
-            <div class="stat-label">Dhaka, Bangladesh</div>
+          <div class="chip">
+            <div class="chip-label">Company</div>
+            <div class="chip-value">GoAxilo</div>
+          </div>
+          <div class="chip">
+            <div class="chip-label">Status</div>
+            <div class="chip-value" style="color:var(--green);">Open ✓</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Text content -->
+      <div class="hero-left">
+
+        <!-- Availability badge -->
+        <div class="hero-badge">
+          <div class="pulse"></div>
+          available for projects
+        </div>
+
+        <!-- Your name — edit here -->
+        <h1 class="hero-name">
+          Saiful<br />Islam <span class="grad">Shah.</span>
+        </h1>
+
+        <!-- Tagline — edit here -->
+        <p class="hero-sub">
+          AI Agent Developer &amp; Founder of <strong>GoAxilo</strong> — building intelligent automation systems that save businesses time and scale their operations. Based in <strong>Dhaka, Bangladesh</strong>.
+        </p>
+
+        <!-- Code card — edit values in green/yellow text -->
+        <div class="hero-code">
+          <div class="hero-code-inner">
+            <span class="ck">const</span> <span class="cv">saiful</span> <span class="cb">= {</span><br />
+            &nbsp;&nbsp;<span class="cp">role</span>: <span class="cs">'AI Agent Developer'</span>,<br />
+            &nbsp;&nbsp;<span class="cp">company</span>: <span class="cs">'GoAxilo (Founder)'</span>,<br />
+            &nbsp;&nbsp;<span class="cp">stack</span>: <span class="cb">[</span><span class="cs">'n8n'</span>, <span class="cs">'Python'</span>, <span class="cs">'LangChain'</span>, <span class="cs">'Make'</span><span class="cb">]</span>,<br />
+            &nbsp;&nbsp;<span class="cp">mission</span>: <span class="cs">'Automate everything. Scale anywhere.'</span>,<br />
+            <span class="cb">};</span>
+          </div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="hero-cta">
+          <a href="#contact" class="btn btn-fill">get in touch →</a>
+          <a href="#projects" class="btn btn-ghost">view work</a>
+        </div>
+
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- =====================================================
+         ABOUT
+         ===================================================== -->
+    <section id="about">
+      <div class="section-eyebrow reveal">about me</div>
+      <h2 class="section-heading reveal">Who I am.</h2>
+
+      <div class="about-grid reveal">
+        <div class="about-text">
+          <!-- EDIT YOUR BIO HERE -->
+          <p>This is Saiful Islam Shah — an <strong>AI Agent Developer</strong>, <strong>Automation Builder</strong>, <strong>Content Creator</strong>, and <strong>Entrepreneur</strong> from Bangladesh.</p>
+          <p>I'm currently studying <strong>Mathematics at Dhaka College</strong> while building real-world AI solutions through my agency <strong>GoAxilo</strong>. I work with tools like <strong>n8n, LangChain, and Python</strong> to help businesses automate their workflows and save time.</p>
+          <p>I'm also the Founder of <strong>Limaar</strong> — a premium women's leather bag brand that I'm building with a global vision.</p>
+          <p>On my <strong>YouTube Channel</strong>, I create content about <strong>AI automation, Programming, Entrepreneurship, and Career guidance</strong> — specifically for <strong>Bangladeshi youth who want to build a future in tech</strong>. My goal is to become one of the <strong>top AI content creator</strong>.</p>
+          <p>Right now, I'm deeply exploring <strong>Multi-Agent AI Systems</strong> — how AI agents can work together to solve complex problems autonomously. This is where I want to build my <strong>Research Foundation</strong>.</p>
+          <P>My long-term goal is to study abroad for a <strong>Master's and PhD in AI, become a serious researcher</strong>, and build companies that create real impact.</P>
+          <P>I believe the next generation of Bangladeshi talent doesn't need to wait for permission to build world-class things — they just need the right knowledge, discipline, and direction.</P>
+        </div>
+        <div>
+          <div class="about-stats">
+            <!-- EDIT NUMBERS HERE -->
+            <div class="stat-box">
+              <div class="stat-num">1+</div>
+              <div class="stat-label">Yr in AI Automation</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-num">2</div>
+              <div class="stat-label">Startups Founded</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-num">10yr</div>
+              <div class="stat-label">Vision Horizon</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-num">∞</div>
+              <div class="stat-label">Automate. Scale.</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <div class="section-divider"></div>
+    <hr class="divider" />
 
-  <!-- ============================================================
-       EXPERIENCE SECTION
-       To add a new experience: copy one .exp-item block
-       and edit the text inside it
-       ============================================================ -->
-  <section id="experience">
-    <p class="section-label">Experience</p>
-    <h2 class="section-title">What I've built &amp; done</h2>
+    <!-- =====================================================
+         EXPERIENCE
+         Copy an .exp-item block to add more jobs
+         ===================================================== -->
+    <section id="experience">
+      <div class="section-eyebrow reveal">experience</div>
+      <h2 class="section-heading reveal">What I've built.</h2>
 
-    <div class="exp-list">
+      <div class="exp-list">
 
-      <!-- Experience Item 1 -->
-      <div class="exp-item">
-        <div class="exp-meta">
-          <div class="exp-date">2025 – Present</div>
-          <div class="exp-company">GoAxilo</div>
-          <div class="exp-location">Dhaka, Bangladesh (Remote)</div>
+        <div class="exp-item reveal">
+          <div>
+            <div class="exp-date">2025 – Present</div>
+            <div class="exp-co">GoAxilo</div>
+          </div>
+          <div>
+            <div class="exp-title">Founder & AI Automation Developer</div>
+            <ul class="exp-bullets">
+              <li>Building AI automation workflows for businesses using n8n, Make, and Zapier.</li>
+              <li>Designing end-to-end pipelines — from lead capture to CRM to automated reporting.</li>
+              <li>Developing AI Agent systems using LangChain and OpenRouter.</li>
+              <li>Competing in Reply AI Agent Challenge 2026 (€20,000 prize pool, fraud detection focus).</li>
+              <li>Building full brand identity, website, and client acquisition strategy from scratch.</li>
+            </ul>
+            <div class="tags">
+              <span class="tag">n8n</span>
+              <span class="tag">LangChain</span>
+              <span class="tag">Make</span>
+              <span class="tag">Zapier</span>
+              <span class="tag">OpenRouter</span>
+              <span class="tag">Python</span>
+            </div>
+          </div>
         </div>
-        <div class="exp-content">
-          <div class="exp-title">Founder &amp; AI Automation Developer</div>
-          <ul class="exp-bullets">
-            <li>Building AI automation workflows for businesses using n8n, Make, and Zapier as the core stack.</li>
-            <li>Designing end-to-end automation pipelines — from lead capture to CRM updates to automated reporting.</li>
-            <li>Developing AI Agent systems using LangChain and OpenRouter for intelligent task execution.</li>
-            <li>Participating in the Reply AI Agent Challenge 2026 (€20,000 prize pool) focused on fraud detection.</li>
-            <li>Building GoAxilo's brand identity, website, and client acquisition strategy from scratch.</li>
-          </ul>
-          <!-- TAGS — Add or remove tools/skills as needed -->
+
+        <div class="exp-item reveal">
+          <div>
+            <div class="exp-date">2024 – Present</div>
+            <div class="exp-co">Self-directed</div>
+          </div>
+          <div>
+            <div class="exp-title">AI Content Creator & Educator</div>
+            <ul class="exp-bullets">
+              <li>Creating educational content on AI automation, Python, and entrepreneurship for Bangladeshi youth.</li>
+              <li>Building personal brand across YouTube, LinkedIn, Facebook, TikTok, and Instagram.</li>
+              <li>Producing tutorials and career guidance to help young people enter the AI industry.</li>
+            </ul>
+            <div class="tags">
+              <span class="tag">YouTube</span>
+              <span class="tag">Content Creation</span>
+              <span class="tag">Personal Branding</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-item reveal">
+          <div>
+            <div class="exp-date">2024 – Present</div>
+            <div class="exp-co">Limaar</div>
+          </div>
+          <div>
+            <div class="exp-title">Co-Founder — Premium Leather Brand</div>
+            <ul class="exp-bullets">
+              <li>Co-founded Limaar, a premium women's leather bag brand with global luxury vision.</li>
+              <li>Handling brand strategy, product positioning, and digital marketing.</li>
+              <li>Long-term goal: grow Limaar to a globally recognized fashion label.</li>
+            </ul>
+            <div class="tags">
+              <span class="tag">Brand Strategy</span>
+              <span class="tag">Entrepreneurship</span>
+              <span class="tag">Fashion</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- =====================================================
+         SKILLS
+         Edit skill names, add/remove .skill-row items
+         Level classes: lv-pro | lv-bld | lv-learn
+         ===================================================== -->
+    <section id="skills">
+      <div class="section-eyebrow reveal">skills</div>
+      <h2 class="section-heading reveal">My tech stack.</h2>
+
+      <div class="skills-grid reveal">
+
+        <div class="skill-group">
+          <div class="skill-group-head">
+            <div class="skill-icon">🤖</div>
+            <div class="skill-group-title">AI & Automation</div>
+          </div>
+          <div class="skill-row">n8n <span class="skill-badge lv-pro">Proficient</span></div>
+          <div class="skill-row">Make (Integromat) <span class="skill-badge lv-bld">Building</span></div>
+          <div class="skill-row">Zapier <span class="skill-badge lv-bld">Building</span></div>
+          <div class="skill-row">LangChain <span class="skill-badge lv-learn">Learning</span></div>
+          <div class="skill-row">OpenRouter <span class="skill-badge lv-bld">Building</span></div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-group-head">
+            <div class="skill-icon">💻</div>
+            <div class="skill-group-title">Programming</div>
+          </div>
+          <div class="skill-row">Python <span class="skill-badge lv-bld">Building</span></div>
+          <div class="skill-row">NumPy <span class="skill-badge lv-learn">Learning</span></div>
+          <div class="skill-row">Pandas <span class="skill-badge lv-learn">Learning</span></div>
+          <div class="skill-row">HTML / CSS <span class="skill-badge lv-bld">Building</span></div>
+          <div class="skill-row">JavaScript <span class="skill-badge lv-learn">Learning</span></div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-group-head">
+            <div class="skill-icon">🧠</div>
+            <div class="skill-group-title">AI & ML</div>
+          </div>
+          <div class="skill-row">Prompt Engineering <span class="skill-badge lv-pro">Proficient</span></div>
+          <div class="skill-row">AI Workflow Design <span class="skill-badge lv-pro">Proficient</span></div>
+          <div class="skill-row">Agentic AI <span class="skill-badge lv-bld">Building</span></div>
+          <div class="skill-row">Machine Learning <span class="skill-badge lv-learn">Learning</span></div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-group-head">
+            <div class="skill-icon">🚀</div>
+            <div class="skill-group-title">Business & Brand</div>
+          </div>
+          <div class="skill-row">Brand Building <span class="skill-badge lv-pro">Proficient</span></div>
+          <div class="skill-row">Content Creation <span class="skill-badge lv-pro">Proficient</span></div>
+          <div class="skill-row">Startup Strategy <span class="skill-badge lv-bld">Building</span></div>
+          <div class="skill-row">Framer / Web Design <span class="skill-badge lv-bld">Building</span></div>
+        </div>
+
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- =====================================================
+         PROJECTS
+         Copy a .project-card to add more projects
+         ===================================================== -->
+    <section id="projects">
+      <div class="section-eyebrow reveal">projects</div>
+      <h2 class="section-heading reveal">Things I've built.</h2>
+
+      <div class="projects-grid reveal">
+
+        <div class="project-card">
+          <div class="project-code">
+            <span class="ck">const</span> <span class="cv">p</span> <span class="cb">= {</span><br />
+            &nbsp;&nbsp;<span class="cp">name</span>: <span class="cs">'GoAxilo Agency'</span>,<br />
+            &nbsp;&nbsp;<span class="cp">stack</span>: <span class="cb">[</span><span class="cs">'n8n'</span>, <span class="cs">'LangChain'</span>, <span class="cs">'Framer'</span><span class="cb">]</span>,<br />
+            &nbsp;&nbsp;<span class="cp">role</span>: <span class="cs">'Founder & Dev'</span>,<br />
+            <span class="cb">};</span>
+          </div>
+          <div class="project-title">GoAxilo — AI Automation Agency</div>
+          <div class="project-desc">Full brand identity, website, and service packages for GoAxilo — an AI automation agency. Services range from Starter to Agency tier with n8n pipelines and AI agent integration.</div>
           <div class="tags">
             <span class="tag">n8n</span>
             <span class="tag">LangChain</span>
-            <span class="tag">Make</span>
-            <span class="tag">Zapier</span>
-            <span class="tag">OpenRouter</span>
             <span class="tag">Framer</span>
           </div>
-        </div>
-      </div>
-
-      <!-- Experience Item 2 -->
-      <div class="exp-item">
-        <div class="exp-meta">
-          <div class="exp-date">2024 – Present</div>
-          <div class="exp-company">Self-Employed</div>
-          <div class="exp-location">Remote</div>
-        </div>
-        <div class="exp-content">
-          <div class="exp-title">AI Content Creator &amp; Educator</div>
-          <ul class="exp-bullets">
-            <li>Creating educational content on AI automation, Python programming, and entrepreneurship for Bangladeshi youth.</li>
-            <li>Building a personal brand across YouTube, LinkedIn, Facebook, TikTok, and Instagram.</li>
-            <li>Producing tutorials and career guidance content to help young people enter the AI industry.</li>
-          </ul>
-          <div class="tags">
-            <span class="tag">YouTube</span>
-            <span class="tag">Content Creation</span>
-            <span class="tag">Personal Branding</span>
+          <div class="project-links">
+            <a href="https://goaxilo.com" target="_blank" class="project-link">live site →</a>
           </div>
         </div>
-      </div>
 
-      <!-- Experience Item 3 -->
-      <div class="exp-item">
-        <div class="exp-meta">
-          <div class="exp-date">2024 – Present</div>
-          <div class="exp-company">Limaar</div>
-          <div class="exp-location">Dhaka, Bangladesh</div>
+        <div class="project-card">
+          <div class="project-code">
+            <span class="ck">const</span> <span class="cv">p</span> <span class="cb">= {</span><br />
+            &nbsp;&nbsp;<span class="cp">name</span>: <span class="cs">'Fraud Detection Agent'</span>,<br />
+            &nbsp;&nbsp;<span class="cp">stack</span>: <span class="cb">[</span><span class="cs">'Python'</span>, <span class="cs">'LangChain'</span>, <span class="cs">'n8n'</span><span class="cb">]</span>,<br />
+            &nbsp;&nbsp;<span class="cp">prize</span>: <span class="cs">'€20,000 pool'</span>,<br />
+            <span class="cb">};</span>
+          </div>
+          <div class="project-title">Reply AI Agent Challenge 2026</div>
+          <div class="project-desc">Built a fraud detection AI agent system for the Reply AI Agent Challenge 2026. Served as the team's workflow and integration specialist, bridging n8n pipelines with LangChain AI backend.</div>
+          <div class="tags">
+            <span class="tag">Python</span>
+            <span class="tag">LangChain</span>
+            <span class="tag">Competition</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/MehrazRumman" target="_blank" class="project-link">github →</a>
+          </div>
         </div>
-        <div class="exp-content">
-          <div class="exp-title">Co-Founder — Premium Leather Brand</div>
-          <ul class="exp-bullets">
-            <li>Co-founded Limaar, a premium women's leather bag brand with vision of global luxury positioning.</li>
-            <li>Handling brand strategy, product positioning, and digital marketing.</li>
-            <li>Long-term goal: grow Limaar to a globally recognized brand in the fashion industry.</li>
-          </ul>
+
+        <div class="project-card">
+          <div class="project-code">
+            <span class="ck">const</span> <span class="cv">p</span> <span class="cb">= {</span><br />
+            &nbsp;&nbsp;<span class="cp">name</span>: <span class="cs">'Limaar Brand'</span>,<br />
+            &nbsp;&nbsp;<span class="cp">stack</span>: <span class="cb">[</span><span class="cs">'Strategy'</span>, <span class="cs">'Branding'</span><span class="cb">]</span>,<br />
+            &nbsp;&nbsp;<span class="cp">vision</span>: <span class="cs">'Global Luxury'</span>,<br />
+            <span class="cb">};</span>
+          </div>
+          <div class="project-title">Limaar — Premium Leather Brand</div>
+          <div class="project-desc">Co-founded Limaar, a premium women's leather bag brand in Bangladesh. Responsible for brand positioning and long-term strategy targeting global luxury market positioning.</div>
           <div class="tags">
             <span class="tag">Brand Strategy</span>
-            <span class="tag">E-commerce</span>
-            <span class="tag">Entrepreneurship</span>
+            <span class="tag">Fashion</span>
+            <span class="tag">Startup</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">coming soon →</a>
           </div>
         </div>
+
       </div>
+    </section>
 
-    </div>
-  </section>
+    <hr class="divider" />
 
-  <div class="section-divider"></div>
+    <!-- =====================================================
+         EDUCATION
+         Copy an .edu-item block to add more entries
+         ===================================================== -->
+    <section id="education">
+      <div class="section-eyebrow reveal">education</div>
+      <h2 class="section-heading reveal">Academic background.</h2>
 
-  <!-- ============================================================
-       SKILLS SECTION
-       Edit skill names and levels inside each .skill-group
-       Levels: learning | building | proficient
-       ============================================================ -->
-  <section id="skills">
-    <p class="section-label">Skills</p>
-    <h2 class="section-title">My tech stack</h2>
+      <div class="edu-list">
 
-    <div class="skills-grid">
-
-      <!-- Skill Group 1: AI & Automation -->
-      <div class="skill-group">
-        <div class="skill-group-header">
-          <!-- Change the emoji to match the group -->
-          <div class="skill-icon">🤖</div>
-          <div class="skill-group-title">AI & Automation</div>
+        <div class="edu-item reveal">
+          <div>
+            <div class="edu-year">2023 – Present</div>
+            <div class="edu-inst">Dhaka College, Dhaka</div>
+          </div>
+          <div>
+            <div class="edu-degree">B.S. in Mathematics (Honors)</div>
+            <div class="edu-note">Studying advanced mathematics while building AI skills in parallel. Strong foundation in logic, statistics, and quantitative thinking — directly applied to machine learning and AI research.</div>
+            <div class="tags" style="margin-top:1rem;">
+              <span class="tag">Mathematics</span>
+              <span class="tag">Statistics</span>
+              <span class="tag">Linear Algebra</span>
+            </div>
+          </div>
         </div>
-        <!-- Each .skill-item = one skill. Level class options:
-             level-proficient = purple (strong)
-             level-building   = amber (growing)
-             level-learning   = green (beginner) -->
-        <div class="skill-item">n8n <span class="skill-level level-proficient">Proficient</span></div>
-        <div class="skill-item">Make (Integromat) <span class="skill-level level-building">Building</span></div>
-        <div class="skill-item">Zapier <span class="skill-level level-building">Building</span></div>
-        <div class="skill-item">LangChain <span class="skill-level level-learning">Learning</span></div>
-        <div class="skill-item">OpenRouter <span class="skill-level level-building">Building</span></div>
+
+        <div class="edu-item reveal">
+          <div>
+            <div class="edu-year">2024 – Present</div>
+            <div class="edu-inst">Online · Self-directed</div>
+          </div>
+          <div>
+            <div class="edu-degree">AI & Automation Engineering</div>
+            <div class="edu-note">Coursework, projects, and competition-based learning covering Python, NumPy, Pandas, LangChain, n8n, and Machine Learning fundamentals. Learning by building real products — not just theory.</div>
+            <div class="tags" style="margin-top:1rem;">
+              <span class="tag">Python</span>
+              <span class="tag">NumPy</span>
+              <span class="tag">Pandas</span>
+              <span class="tag">LangChain</span>
+              <span class="tag">n8n</span>
+              <span class="tag">Machine Learning</span>
+            </div>
+          </div>
+        </div>
+
       </div>
+    </section>
 
-      <!-- Skill Group 2: Programming -->
-      <div class="skill-group">
-        <div class="skill-group-header">
-          <div class="skill-icon">💻</div>
-          <div class="skill-group-title">Programming</div>
+    <hr class="divider" />
+
+    <!-- =====================================================
+         VISION / GOALS
+         Edit each goal-card to update your milestones
+         ===================================================== -->
+    <section id="goals">
+      <div class="section-eyebrow reveal">vision 2026–2036</div>
+      <h2 class="section-heading reveal">Where I'm going.</h2>
+
+      <div class="goals-grid reveal">
+        <div class="goal-card">
+          <div class="goal-year">2026</div>
+          <div class="goal-text">First GoAxilo clients. Win AI competition. Launch website.</div>
         </div>
-        <div class="skill-item">Python <span class="skill-level level-building">Building</span></div>
-        <div class="skill-item">NumPy <span class="skill-level level-learning">Learning</span></div>
-        <div class="skill-item">Pandas <span class="skill-level level-learning">Learning</span></div>
-        <div class="skill-item">HTML / CSS <span class="skill-level level-building">Building</span></div>
-        <div class="skill-item">JavaScript <span class="skill-level level-learning">Learning</span></div>
-      </div>
-
-      <!-- Skill Group 3: AI/ML (Theoretical) -->
-      <div class="skill-group">
-        <div class="skill-group-header">
-          <div class="skill-icon">🧠</div>
-          <div class="skill-group-title">AI & ML</div>
+        <div class="goal-card">
+          <div class="goal-year">2027</div>
+          <div class="goal-text">Grow GoAxilo to 10+ clients. 10k YouTube subscribers.</div>
         </div>
-        <div class="skill-item">Machine Learning <span class="skill-level level-learning">Learning</span></div>
-        <div class="skill-item">Agentic AI <span class="skill-level level-building">Building</span></div>
-        <div class="skill-item">Prompt Engineering <span class="skill-level level-proficient">Proficient</span></div>
-        <div class="skill-item">AI Workflows <span class="skill-level level-proficient">Proficient</span></div>
-      </div>
-
-      <!-- Skill Group 4: Business & Brand -->
-      <div class="skill-group">
-        <div class="skill-group-header">
-          <div class="skill-icon">🚀</div>
-          <div class="skill-group-title">Business & Brand</div>
+        <div class="goal-card">
+          <div class="goal-year">2028</div>
+          <div class="goal-text">Apply to study AI abroad. Scale GoAxilo to retainer model.</div>
         </div>
-        <div class="skill-item">Startup Strategy <span class="skill-level level-building">Building</span></div>
-        <div class="skill-item">Brand Building <span class="skill-level level-proficient">Proficient</span></div>
-        <div class="skill-item">Content Creation <span class="skill-level level-proficient">Proficient</span></div>
-        <div class="skill-item">Framer / Web Design <span class="skill-level level-building">Building</span></div>
-      </div>
-
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- ============================================================
-       PROJECTS SECTION
-       Copy a .project-card to add more projects
-       ============================================================ -->
-  <section id="projects">
-    <p class="section-label">Projects</p>
-    <h2 class="section-title">Things I've built</h2>
-
-    <div class="projects-grid">
-
-      <!-- Project Card 1 -->
-      <div class="project-card">
-        <div class="project-code">
-          <span class="code-keyword">const</span> <span class="code-var">project</span> <span class="code-brace">= {</span><br />
-          &nbsp;&nbsp;<span class="code-key">name</span>: <span class="code-string">'GoAxilo Agency'</span>,<br />
-          &nbsp;&nbsp;<span class="code-key">tools</span>: <span class="code-brace">[</span><span class="code-string">'n8n'</span>, <span class="code-string">'Framer'</span>, <span class="code-string">'LangChain'</span><span class="code-brace">]</span>,<br />
-          &nbsp;&nbsp;<span class="code-key">role</span>: <span class="code-string">'Founder &amp; Developer'</span>,<br />
-          <span class="code-brace">};</span>
+        <div class="goal-card">
+          <div class="goal-year">2030</div>
+          <div class="goal-text">Professional AI Engineer. Limaar enters global market.</div>
         </div>
-        <div class="project-title">GoAxilo — AI Automation Agency</div>
-        <div class="project-desc">
-          Built the full brand identity, website, and service packages for GoAxilo — an AI automation agency offering workflow automation services ranging from Starter to Agency tier. Services include n8n-based pipelines, AI agent integration, and CRM automation.
+        <div class="goal-card">
+          <div class="goal-year">2033</div>
+          <div class="goal-text">Top YouTube creator. Published AI researcher.</div>
         </div>
-        <div class="tags">
-          <span class="tag">n8n</span>
-          <span class="tag">LangChain</span>
-          <span class="tag">Framer</span>
-          <span class="tag">Brand Identity</span>
-        </div>
-        <div class="project-links">
-          <!-- Update href to your live site URL -->
-          <a href="https://goaxilo.com" target="_blank" class="project-link">Live Site →</a>
+        <div class="goal-card">
+          <div class="goal-year">2036</div>
+          <div class="goal-text">Global AI brand. Multiple successful startups.</div>
         </div>
       </div>
+    </section>
 
-      <!-- Project Card 2 -->
-      <div class="project-card">
-        <div class="project-code">
-          <span class="code-keyword">const</span> <span class="code-var">project</span> <span class="code-brace">= {</span><br />
-          &nbsp;&nbsp;<span class="code-key">name</span>: <span class="code-string">'Reply AI Agent Challenge'</span>,<br />
-          &nbsp;&nbsp;<span class="code-key">tools</span>: <span class="code-brace">[</span><span class="code-string">'Python'</span>, <span class="code-string">'LangChain'</span>, <span class="code-string">'n8n'</span><span class="code-brace">]</span>,<br />
-          &nbsp;&nbsp;<span class="code-key">role</span>: <span class="code-string">'Workflow &amp; Integration Specialist'</span>,<br />
-          <span class="code-brace">};</span>
-        </div>
-        <div class="project-title">Fraud Detection AI Agent</div>
-        <div class="project-desc">
-          Participated in the Reply AI Agent Challenge 2026 (€20,000 prize pool). Built a fraud detection agent system using LangChain and Python. Served as the team's workflow and integration specialist, bridging n8n pipelines with the AI backend.
-        </div>
-        <div class="tags">
-          <span class="tag">Python</span>
-          <span class="tag">LangChain</span>
-          <span class="tag">Competition</span>
-          <span class="tag">Fraud Detection</span>
-        </div>
-        <div class="project-links">
-          <a href="https://github.com/MehrazRumman" target="_blank" class="project-link">GitHub →</a>
-        </div>
-      </div>
+    <!-- =====================================================
+         CONTACT
+         Update each href URL for your social links
+         ===================================================== -->
+    <div id="contact">
+      <div class="contact-inner">
+        <h2 class="contact-headline">Let's work<br /><span class="grad">together.</span></h2>
+        <p class="contact-sub">Open to freelance projects, agency collaborations, and AI automation work.</p>
 
-      <!-- Project Card 3 -->
-      <div class="project-card">
-        <div class="project-code">
-          <span class="code-keyword">const</span> <span class="code-var">project</span> <span class="code-brace">= {</span><br />
-          &nbsp;&nbsp;<span class="code-key">name</span>: <span class="code-string">'Limaar Brand'</span>,<br />
-          &nbsp;&nbsp;<span class="code-key">tools</span>: <span class="code-brace">[</span><span class="code-string">'Brand Strategy'</span>, <span class="code-string">'E-Commerce'</span><span class="code-brace">]</span>,<br />
-          &nbsp;&nbsp;<span class="code-key">role</span>: <span class="code-string">'Co-Founder'</span>,<br />
-          <span class="code-brace">};</span>
+        <div class="social-grid">
+          <a href="mailto:saifulshah2004@gmail.com" class="social-link">
+            <div class="sdot" style="background:#AFA9EC"></div>email
+          </a>
+          <a href="https://linkedin.com/in/saiful-islam-shah" target="_blank" class="social-link">
+            <div class="sdot" style="background:#0A66C2"></div>linkedin
+          </a>
+          <a href="https://www.youtube.com/@Saiful_Islam_Shah78" target="_blank" class="social-link">
+            <div class="sdot" style="background:#FF0000"></div>youtube
+          </a>
+          <a href="https://github.com/MehrazRumman" target="_blank" class="social-link">
+            <div class="sdot" style="background:#fff"></div>github
+          </a>
+          <a href="https://facebook.com/Saiful.Islam.Shah78" target="_blank" class="social-link">
+            <div class="sdot" style="background:#1877F2"></div>facebook
+          </a>
+          <a href="https://instagram.com/saiful_islam_shah78" target="_blank" class="social-link">
+            <div class="sdot" style="background:#E1306C"></div>instagram
+          </a>
+          <a href="https://x.com/Saiful_Shah78" target="_blank" class="social-link">
+            <div class="sdot" style="background:#fff"></div>x / twitter
+          </a>
+          <a href="https://www.tiktok.com/@saiful_islam_shah" target="_blank" class="social-link">
+            <div class="sdot" style="background:#EE1D52"></div>tiktok
+          </a>
+          <a href="http://t.me/SaifulDC" target="_blank" class="social-link">
+            <div class="sdot" style="background:#26A5E4"></div>telegram
+          </a>
+          <a href="https://goaxilo.com" target="_blank" class="social-link">
+            <div class="sdot" style="background:#8A6BFF"></div>goaxilo.com
+          </a>
         </div>
-        <div class="project-title">Limaar — Premium Leather Brand</div>
-        <div class="project-desc">
-          Co-founded Limaar, a premium women's leather bag brand based in Bangladesh. Responsible for brand positioning, digital presence, and long-term strategy targeting global luxury market entry — inspired by brands like Gucci.
+
+        <div class="contact-footer">
+          <span>© 2025 Saiful Islam Shah</span>
+          <span>Dhaka, Bangladesh · Built with HTML & ❤</span>
         </div>
-        <div class="tags">
-          <span class="tag">Brand Strategy</span>
-          <span class="tag">Fashion</span>
-          <span class="tag">Startup</span>
-        </div>
-        <div class="project-links">
-          <!-- Update href when Limaar has a site -->
-          <a href="#" class="project-link">Coming soon →</a>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- ============================================================
-       EDUCATION SECTION
-       Copy an .edu-item to add more education entries
-       ============================================================ -->
-  <section id="education">
-    <p class="section-label">Education</p>
-    <h2 class="section-title">Academic background</h2>
-
-    <div class="edu-list">
-
-      <div class="edu-item">
-        <div>
-          <div class="edu-year">2023 – Present</div>
-        </div>
-        <div>
-          <div class="edu-degree">B.S. in Mathematics (Honors)</div>
-          <div class="edu-institution">Dhaka College, Dhaka</div>
-          <div class="edu-note">Studying advanced mathematics while building AI skills in parallel.</div>
-        </div>
-      </div>
-
-      <div class="edu-item">
-        <div>
-          <div class="edu-year">Self-directed, 2024–Present</div>
-        </div>
-        <div>
-          <div class="edu-degree">AI &amp; Automation Engineering</div>
-          <div class="edu-institution">Online (Coursework, Projects &amp; Competition)</div>
-          <div class="edu-note">Python, NumPy, Pandas, LangChain, n8n, Machine Learning. Learning by building real products.</div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- ============================================================
-       GOALS SECTION — Unique vision roadmap
-       Edit each .goal-card to update your milestones
-       ============================================================ -->
-  <section id="goals">
-    <p class="section-label">Vision 2026–2036</p>
-    <h2 class="section-title">Where I'm going</h2>
-
-    <div class="goals-grid">
-      <!-- Each card = one milestone. Change goal-year and goal-text -->
-      <div class="goal-card">
-        <div class="goal-year">2026</div>
-        <div class="goal-text">Get first GoAxilo clients. Win AI competition. Launch website.</div>
-      </div>
-      <div class="goal-card">
-        <div class="goal-year">2027</div>
-        <div class="goal-text">Grow GoAxilo to 10+ clients. Reach 10k YouTube subscribers.</div>
-      </div>
-      <div class="goal-card">
-        <div class="goal-year">2028</div>
-        <div class="goal-text">Apply to study AI abroad. Scale GoAxilo to retainer model.</div>
-      </div>
-      <div class="goal-card">
-        <div class="goal-year">2030</div>
-        <div class="goal-text">Become a professional AI Engineer. Limaar goes global.</div>
-      </div>
-      <div class="goal-card">
-        <div class="goal-year">2033</div>
-        <div class="goal-text">Top-level YouTuber on AI &amp; entrepreneurship. AI researcher.</div>
-      </div>
-      <div class="goal-card">
-        <div class="goal-year">2036</div>
-        <div class="goal-text">Global AI brand. Multiple successful startups. AI research publications.</div>
       </div>
     </div>
-  </section>
 
-  <!-- ============================================================
-       CONTACT SECTION — Dark background, social links
-       Update each href to your actual profile URLs
-       ============================================================ -->
-  <div id="contact">
-    <div class="contact-inner">
-      <h2 class="contact-title">Let's work together.</h2>
-      <p class="contact-sub">Open to freelance projects, agency collaborations, and AI automation work.</p>
+  </div><!-- end page-wrap -->
 
-      <!-- SOCIAL LINKS — Update each href URL -->
-      <div class="social-grid">
+  <!-- =====================================================
+       JAVASCRIPT — cursor + scroll animations
+       Don't edit unless you know JS
+       ===================================================== -->
+  <script>
+    // Custom cursor follow effect
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
 
-        <a href="mailto:saifulshah2004@gmail.com" class="social-link">
-          <div class="social-dot" style="background:#AFA9EC;"></div>
-          saifulshah2004@gmail.com
-        </a>
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx - 5 + 'px';
+      cursor.style.top  = my - 5 + 'px';
+    });
 
-        <a href="https://linkedin.com/in/saiful-islam-shah" target="_blank" class="social-link">
-          <div class="social-dot" style="background:#0A66C2;"></div>
-          LinkedIn
-        </a>
+    // Ring follows with slight delay
+    function animateRing() {
+      rx += (mx - rx - 18) * 0.12;
+      ry += (my - ry - 18) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
 
-        <a href="https://www.youtube.com/@Saiful_Islam_Shah78" target="_blank" class="social-link">
-          <div class="social-dot" style="background:#FF0000;"></div>
-          YouTube
-        </a>
+    // Scale cursor on hover over links/buttons
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'scale(2.5)';
+        ring.style.transform   = 'scale(1.5)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'scale(1)';
+        ring.style.transform   = 'scale(1)';
+      });
+    });
 
-        <a href="https://github.com/MehrazRumman" target="_blank" class="social-link">
-          <div class="social-dot" style="background:#F8F7FF;"></div>
-          GitHub
-        </a>
+    // Scroll reveal animations
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
 
-        <a href="https://facebook.com/Saiful.Islam.Shah78" target="_blank" class="social-link">
-          <div class="social-dot" style="background:#1877F2;"></div>
-          Facebook
-        </a>
-
-        <a href="https://instagram.com/saiful_islam_shah78" target="_blank" class="social-link">
-          <div class="social-dot" style="background:#E1306C;"></div>
-          Instagram
-        </a>
-
-        <a href="https://x.com/Saiful_Shah78" target="_blank" class="social-link">
-          <div class="social-dot" style="background:#F8F7FF;"></div>
-          X (Twitter)
-        </a>
-
-        <a href="https://www.tiktok.com/@saiful_islam_shah" target="_blank" class="social-link">
-          <div class="social-dot" style="background:#EE1D52;"></div>
-          TikTok
-        </a>
-
-        <a href="http://t.me/SaifulDC" target="_blank" class="social-link">
-          <div class="social-dot" style="background:#26A5E4;"></div>
-          Telegram
-        </a>
-
-        <a href="https://goaxilo.com" target="_blank" class="social-link">
-          <div class="social-dot" style="background:#534AB7;"></div>
-          GoAxilo.com
-        </a>
-
-      </div>
-
-      <!-- Footer row -->
-      <div class="contact-footer">
-        <span>© 2025 Saiful Islam Shah — All rights reserved.</span>
-        <span>Built with HTML, CSS &amp; ❤ from Dhaka, Bangladesh</span>
-      </div>
-    </div>
-  </div>
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
 
 </body>
 </html>
